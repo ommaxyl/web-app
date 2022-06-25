@@ -27,7 +27,7 @@ pipeline{
     stage('4.uploadToNexus'){
       steps{
       sh "echo artifacts uploaded"
-      //sh "mvn deploy"
+      sh "mvn deploy"
       } 
     }
     stage('5.Deploy2Tomcat'){
