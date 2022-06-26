@@ -1,0 +1,53 @@
+pipeline{
+    agent any
+    tools{
+      maven "maven3.8.4"
+    }
+    stages{
+      stage("1.CodeClone"){
+        steps{
+          git "https://github.com/ommaxyl/web-app.git"
+        }
+      }
+      stage("2.Build"){
+        steps{
+          sh "echo start of application build"
+          sh "mvn clean package"
+        }
+      }
+      stage("3.CodeQuality"){
+        steps{
+          sh "mvn sonar:sonar"
+        }
+      }
+      stage("4.Artifacts"){
+        steps{
+          sh "mvn deploy"
+        }
+      }
+      stage("5.DeploytoUAT"){
+        steps{
+        deploy adapters: [tomcat9(credentialsId: 'tomcat-cred', path: '', url: 'http://3.136.19.104:7500/')], contextPath: 'zenith.war', war: 'target/*.war'     
+        }
+      }
+      stage("6.Approval"){
+        steps{
+          timeout(time:5, unit: 'DAYS'){
+           input message: 'Approval for Production'
+         }
+        }
+      }
+      stage("7.DeploytoProd"){
+        steps{
+          deploy adapters: [tomcat9(credentialsId: 'tomcat-cred', path: '', url: 'http://3.136.19.104:7500/')], contextPath: 'zenith.war', war: 'target/*.war'    
+        }
+      }
+      stage("8.EmailNotification"){
+        steps{
+      emailext body: 'The Built was successful', subject: 'The built status', to: 'muheezopebiyi@yahoo.com'
+        }
+      }
+  
+    }
+  }
+
