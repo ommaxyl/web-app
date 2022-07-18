@@ -27,7 +27,7 @@ pipeline{
       }
       stage("5.DeploytoUAT"){
         steps{
-        deploy adapters: [tomcat9(credentialsId: 'tomcat-cred', path: '', url: 'http://18.216.49.168:7500/')], contextPath: 'zenith.war', war: 'target/*.war'     
+        deploy adapters: [tomcat9(credentialsId: 'tomcat-cred', path: '', url: 'http://3.17.173.73:7500/')], contextPath: 'zenith.war', war: 'target/*.war'     
         }
       }
       stage("6.Approval"){
@@ -39,7 +39,7 @@ pipeline{
       }
       stage("7.DeploytoProd"){
         steps{
-          deploy adapters: [tomcat9(credentialsId: 'tomcat-cred', path: '', url: 'http://18.216.49.168:7500/')], contextPath: 'zenith.war', war: 'target/*.war'    
+          deploy adapters: [tomcat9(credentialsId: 'tomcat-cred', path: '', url: 'http://3.17.173.73:7500/')], contextPath: 'zenith.war', war: 'target/*.war'    
         }
       }
       stage("8.EmailNotification"){
